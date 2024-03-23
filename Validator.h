@@ -14,7 +14,7 @@ private:
 	int counter = 0;
 
 	//буффер для токенов, состоящих из нескольких символов
-	vector<char> buffer;
+	string buffer = "";
 
 public:
 	Validator(vector<Token> tokens);

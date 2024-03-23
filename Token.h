@@ -28,5 +28,14 @@ public:
 
 	//конструктор класса Token 2
 	Token(string open_symbol, string close_symbol, bool ignore_flag);
+
+	//
+	int validate(string buffer, int position);
+
+	//
+	void open(int position);
+
+	//
+	void close(int position);
 };
 
