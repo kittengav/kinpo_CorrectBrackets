@@ -3,6 +3,7 @@
 #include "Validator.h"
 #include <vector>
 #include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -15,4 +16,19 @@ Application::Application(string file_name)
 							Token(string("//"), string("\n")), 
 							Token(string("/*"), string("*/"))
 							};
+
+	//создаем валидатор, передав конструктуру токены
+	Validator validator = Validator(tokens);
+
+	char symbol; //объ€вл€ем переменную дл€ хранени€ каждого символа
+	ifstream fin; //дл€ чтени€ из файла
+	fin.open(file_name); //открытие файла
+	//пока файл не закончилс€
+	while (!fin.eof())
+	{
+		//записать текущий символ в symbol
+		fin >> symbol;
+		//передаем его в validator
+		validator.next(symbol);
+	}
 }
