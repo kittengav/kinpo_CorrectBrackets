@@ -13,6 +13,9 @@ private:
 	//вектор с номерами символов закрытия
 	vector<int> close_chars = {};
 
+	//
+	bool is_open = false;
+
 public:
 	//флаг, говорящий игнорировать то, что внутри токена
 	bool ignore_flag = false;
@@ -30,12 +33,17 @@ public:
 	Token(string open_symbol, string close_symbol, bool ignore_flag);
 
 	//
-	int validate(string buffer, int position);
+	int validate(string buffer, int position, vector<int> other_tokens);
 
 	//
 	void open(int position);
 
 	//
-	void close(int position);
+	void close(int position, vector<int> other_tokens);
+
+	//
+	bool is_opened();
+
+	int last_opened();
 };
 
