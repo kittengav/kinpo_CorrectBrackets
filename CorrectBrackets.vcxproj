@@ -146,6 +146,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
+    <ClInclude Include="exceptions.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="Validator.h" />
   </ItemGroup>

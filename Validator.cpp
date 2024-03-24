@@ -1,4 +1,5 @@
 #include "Validator.h"
+#include "exceptions.h"
 #include <map>
 
 Validator::Validator(vector<Token> tokens)
@@ -12,48 +13,64 @@ void Validator::next(char symbol)
 
 	this->buffer += symbol;
 
-	//дл€ каждого токена
-	for (auto token : this->tokens) {
-		//если токен комментарий или строка/символ и он открыт
-		if (token.ignore_flag == true && token.is_opened()) {
-			//вызываем метод validate
-			token.validate(this->buffer, this->counter);
-			//выходим из метода
-			return;
+	try {
+		map<int, string> opened_tokens = {};
+		//собираем информацию о позици€х последнего открыти€ каждого токена	
+		for (auto token : this->tokens) {
+			if (token.is_opened()) {
+				opened_tokens[token.last_opened()] = token.close_symbol;
+			}
 		}
+
+		//дл€ каждого токена
+		for (auto token : this->tokens) {
+			//если токен комментарий или строка/символ и он открыт
+			if (token.ignore_flag == true && token.is_opened()) {
+				//вызываем метод validate
+				token.validate(this->buffer, this->counter, opened_tokens);
+				//выходим из метода
+				return;
+			}
+		}
+
+		//инициализируем массив статусов результатов
+		vector<int> results = {};
+
+		//вызываем метод validate дл€ каждого токена и записываем в results
+		for (auto token : this->tokens) {
+			results.push_back(token.validate(this->buffer, this->counter, opened_tokens));
+		}
+		for (auto r : results) {
+			if (r == 2) {
+				this->buffer = "";
+				return;
+			}
+			if (r == 1) {
+				return;
+			}
+		}
+		this->buffer = "";
 	}
+	catch (BaseException e) {
+		this->errors.push_back(e.get_message());
+	}
+}
 
-	//инициализируем массив статусов результатов
-	vector<int> results = {};
+string Validator::get_errors()
+{
+	string result = "";
+	for (auto e : this->errors) {
+		result += e + string("\n");
+	}
+	return result;
+}
 
-	//инициализируем массив позиций открытых токенов
-	map<int, string> opened_tokens = {};
-
-	//{[ }]
-	
-		
-	//собираем информацию о позици€х последнего открыти€ каждого токена	
+void Validator::end()
+{
 	for (auto token : this->tokens) {
 		if (token.is_opened()) {
-			opened_tokens[token.last_opened()] = token.close_symbol;
+			this->errors.push_back(BaseException(this->counter, token.close_symbol, string("незакрытый токен")).get_message());
 		}
 	}
-
-
-	//вызвыаем метод validate дл€ каждого токена и записываем в results
-	for (auto token : this->tokens) {
-		results.push_back(token.validate(this->buffer, this->counter));
-	}
-	for (auto r : results) {
-		if (r == 2) {
-			this->buffer = "";
-			return;
-		}
-		if (r == 1) {
-			return;
-		}
-	}
-	this->buffer = ""; 
-
 }
 

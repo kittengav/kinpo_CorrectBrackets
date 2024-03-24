@@ -1,0 +1,2 @@
+C:\Users\kitte\source\repos\CorrectBrackets\x64\Debug\CorrectBrackets.exe
+C:\Users\kitte\source\repos\CorrectBrackets\x64\Debug\CorrectBrackets.pdb

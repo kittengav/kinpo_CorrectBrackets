@@ -16,10 +16,16 @@ private:
 	//буффер для токенов, состоящих из нескольких символов
 	string buffer = "";
 
+	vector<string> errors;
+
 public:
 	Validator(vector<Token> tokens);
 	
 	void next(char symbol);
+
+	string get_errors();
+
+	void end();
 };
 
 

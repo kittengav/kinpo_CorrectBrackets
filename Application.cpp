@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <iostream>
 
 using namespace std;
 
@@ -31,4 +32,14 @@ Application::Application(string file_name)
 		//передаем его в validator
 		validator.next(symbol);
 	}
+
+	validator.end();
+
+	string errors = validator.get_errors();
+	if (errors != string("")){
+		cout << errors;
+		return;
+	}
+	cout << "success";
+	return;
 }

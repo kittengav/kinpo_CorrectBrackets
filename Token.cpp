@@ -1,5 +1,7 @@
 #include "Token.h"
 #include "exceptions.h"
+#include <map>
+
 
 Token::Token(string open_symbol, string close_symbol)
 {
@@ -15,7 +17,7 @@ Token::Token(string open_symbol, string close_symbol, bool ignore_flag)
 }
 
 
-int Token::validate(string buffer, int position, vector<int> other_tokens)
+int Token::validate(string buffer, int position, map<int, string> other_tokens)
 {
 	//если содержимое буффера равно символу открытия токена
 	if (buffer == this->open_symbol) {
@@ -44,17 +46,23 @@ int Token::validate(string buffer, int position, vector<int> other_tokens)
 
 void Token::open(int position)
 {
+	this->open_count++;
 	this->is_open = true;
 	this->open_chars.push_back(position);
 }
 
-void Token::close(int position, vector<int> other_tokens)
+void Token::close(int position, map<int, string> other_tokens)
 {
-	for (auto open_pos:other_tokens){
-		if (this->last_opened() < open_pos) {
-			throw BaseException(position, );
+	for (auto const& iter : other_tokens)
+	{
+		if (this->last_opened() < iter.first) {
+			throw BaseException(position, iter.second);
 		}
 	}
+	if (this->open_count > 0) {
+		throw BaseException(position, string(""));
+	}
+	this->open_count--;
 	this->is_open = false;
 	this->close_chars.push_back(position);
 
@@ -67,7 +75,7 @@ bool Token::is_opened()
 
 int Token::last_opened()
 {
-	return this->open_chars[this->open_chars.size() - 1];
+	return this->open_chars[this->open_count - 1];
 }
 
 

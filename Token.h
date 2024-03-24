@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <map>
 
 using namespace std;
 
@@ -15,6 +16,8 @@ private:
 
 	//
 	bool is_open = false;
+
+	int open_count = 0;
 
 public:
 	//флаг, говорящий игнорировать то, что внутри токена
@@ -33,13 +36,13 @@ public:
 	Token(string open_symbol, string close_symbol, bool ignore_flag);
 
 	//
-	int validate(string buffer, int position, vector<int> other_tokens);
+	int validate(string buffer, int position, map<int, string> other_tokens);
 
 	//
 	void open(int position);
 
 	//
-	void close(int position, vector<int> other_tokens);
+	void close(int position, map<int, string> other_tokens);
 
 	//
 	bool is_opened();
