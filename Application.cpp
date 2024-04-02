@@ -14,8 +14,10 @@ Application::Application(string file_name)
 	vector<Token> tokens = {Token(string("("), string(")")), 
 							Token(string("{"), string("}")), 
 							Token(string("["), string("]")), 
-							Token(string("//"), string("\n")), 
-							Token(string("/*"), string("*/"))
+							Token(string("//"), string("\n"), true), 
+							Token(string("/*"), string("*/"), true),
+							Token(string("\""), string("\""), true),
+							Token(string("\'"), string("\'"), true)
 							};
 
 	//создаем валидатор, передав конструктуру токены
@@ -25,21 +27,23 @@ Application::Application(string file_name)
 	ifstream fin; //для чтения из файла
 	fin.open(file_name); //открытие файла
 	//пока файл не закончился
-	while (!fin.eof())
+	do 
 	{
 		//записать текущий символ в symbol
-		fin >> symbol;
+		//fin >> symbol;
+		symbol = fin.get();
+		//cout << symbol;
 		//передаем его в validator
 		validator.next(symbol);
-	}
-
+	} while (!fin.eof());
+	cout << "here\n";
 	validator.end();
 
 	string errors = validator.get_errors();
-	if (errors != string("")){
+	//if (errors != string("")){
 		cout << errors;
 		return;
-	}
+	//}
 	cout << "success";
 	return;
 }

@@ -1,6 +1,7 @@
 #include "Validator.h"
 #include "exceptions.h"
 #include <map>
+#include <iostream>
 
 Validator::Validator(vector<Token> tokens)
 {
@@ -26,6 +27,7 @@ void Validator::next(char symbol)
 		for (auto token : this->tokens) {
 			//если токен комментарий или строка/символ и он открыт
 			if (token.ignore_flag == true && token.is_opened()) {
+				cout << "here2\n";
 				//вызываем метод validate
 				token.validate(this->buffer, this->counter, opened_tokens);
 				//выходим из метода

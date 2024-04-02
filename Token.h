@@ -19,6 +19,8 @@ private:
 
 	int open_count = 0;
 
+	void perform_close(int position);
+
 public:
 	//флаг, говорящий игнорировать то, что внутри токена
 	bool ignore_flag = false;
@@ -48,5 +50,7 @@ public:
 	bool is_opened();
 
 	int last_opened();
+
+	
 };
 
